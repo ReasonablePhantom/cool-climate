@@ -1,0 +1,230 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "### Calculates carbon footprint based on various factors.\nThe interactive docs below allow you to test parameter usage and see how both requests and return payloads are formatted using the **\"Try it out!\"** feature.",
+    "version" : "0.1",
+    "title" : "CoolClimate API"
+  },
+  "host" : "apis.berkeley.edu",
+  "basePath" : "/coolclimate",
+  "schemes" : [ "https" ],
+  "produces" : [ "application/json", "application/xml" ],
+  "paths" : {
+    "/footprint-defaults" : {
+      "get" : {
+        "summary" : "Compute footprint with defaults",
+        "description" : "Calculate carbon footprint using default parameters.  The following tables map parameter values to their meanings.\n<table style='border:none;' cellspacing='0' cellpadding='0'> <tr> <td> <table style='border:none;' cellspacing='0' cellpadding='0'> <tr><td colspan='2'>Household income (input_income) values:<\/td><\/tr> <tr> <td><b>1:<\/b><\/td> <td>Average<\/td> <\/tr> <tr> <td><b>2:<\/b><\/td> <td>Less than $10,000<\/td> <\/tr> <tr> <td><b>3:<\/b><\/td> <td>$10,000 to $19,999<\/td> <\/tr> <tr> <td><b>4:<\/b><\/td> <td>$20,000 to $29,999<\/td> <\/tr> <tr> <td><b>5:<\/b><\/td> <td>$30,000 to $39,999<\/td> <\/tr> <tr> <td><b>6:<\/b><\/td> <td>$40,000 to $49,999<\/td> <\/tr> <tr> <td><b>7:<\/b><\/td> <td>$50,000 to $59,999<\/td> <\/tr> <tr> <td><b>8:<\/b><\/td> <td>$60,000 to $79,999<\/td> <\/tr> <tr> <td><b>9:<\/b><\/td> <td>$80,000 to $99,999<\/td> <\/tr> <tr> <td><b>10:<\/b><\/td> <td>$100,000 to $119,999<\/td> <\/tr> <tr> <td><b>11:<\/b><\/td> <td>$120,000 or more<\/td> <\/tr> <\/table> <\/td> <td>  <table style='border:none;' cellspacing='0' cellpadding='0'><tr><td colspan='2'>Household size (input_size) values:<\/td><\/tr> <tr> <td><b>0:<\/b><\/td> <td>Average<\/td> <\/tr> <tr> <td><b>1:<\/b><\/td> <td>1 person<\/td> <\/tr> <tr> <td><b>2:<\/b><\/td> <td>2 people<\/td> <\/tr> <tr> <td><b>3:<\/b><\/td> <td>3 people<\/td> <\/tr> <tr> <td><b>4:<\/b><\/td> <td>4 people<\/td> <\/tr> <tr> <td><b>5:<\/b><\/td> <td>5 or more people<\/td> <\/tr><\/table> <\/td> <td> <table style='border:none;' cellspacing='0' cellpadding='0'><tr><td colspan='2'>Location mode (input_location_mode) values:<\/td><\/tr>  <tr><td>1:<\/td><td>ZIP code<\/td><\/tr> <tr><td>2:<\/td><td>City<\/td><\/tr><tr><td>3:<\/td><td>County<\/td><\/tr><tr><td>4:<\/td><td>State<\/td><\/tr><\/table> <\/td> <\/tr> <\/table>",
+        "operationId" : "getDefaultFootprint",
+        "parameters" : [ 
+          {
+            "name" : "input_location_mode",
+            "in" : "query",
+            "description" : "Location mode (see \"Imlementation Notes\" above)",
+            "required" : true,
+            "type" : "string",
+            "enum" : [
+                "1",
+                "2",
+                "3",
+                "4"
+            ]
+          }, 
+          {
+            "name" : "input_location",
+            "in" : "query",
+            "description" : "A ZIP code, city, county, or state (depending on 'input_location_mode' parameter)",
+            "required" : true,
+            "type" : "string"
+          }, 
+          {
+            "name" : "input_income",
+            "in" : "query",
+            "description" : "Household income (see \"Imlementation Notes\" above)",
+            "required" : true,
+            "type" : "string",
+            "enum" : [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11"
+            ]
+          }, 
+          {
+            "name" : "input_size",
+            "in" : "query",
+            "description" : "Household size (see \"Imlementation Notes\" above)",
+            "required" : true,
+            "type" : "string",
+            "enum" : [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ]
+          }, 
+          {
+            "name" : "app_id",
+            "in" : "header",
+            "description" : "The public ID portion of API Central credentials",
+            "required" : true,
+            "type" : "string"
+          }, 
+          {
+            "name" : "app_key",
+            "in" : "header",
+            "description" : "The private key portion of API Central credentials",
+            "required" : true,
+            "type" : "string"
+          } 
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Okay"
+          },
+          "400" : {
+            "description" : "Invalid request"
+          },
+          "401" : {
+            "description" : "Access denied"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    },
+    "/footprint-sandbox" : {
+      "get" : {
+        "summary" : "CoolClimate Calculator Example",
+        "description" : "Calculate carbon footprint with user-specified parameters. NOTE: The actual API takes many more parameters; this is just an example. When calling the actual API, change resource path from 'footprint-sandbox' to 'footprint'. The following tables map parameter values to their meanings.<br> <table style='border:none;' cellspacing='0' cellpadding='0'> <tr> <td> <table style='border:none;' cellspacing='0' cellpadding='0'> <tr><td colspan='2'>Household income (input_income) values:<\/td><\/tr> <tr> <td><b>1:<\/b><\/td> <td>Average<\/td> <\/tr> <tr> <td><b>2:<\/b><\/td> <td>Less than $10,000<\/td> <\/tr> <tr> <td><b>3:<\/b><\/td> <td>$10,000 to $19,999<\/td> <\/tr> <tr> <td><b>4:<\/b><\/td> <td>$20,000 to $29,999<\/td> <\/tr> <tr> <td><b>5:<\/b><\/td> <td>$30,000 to $39,999<\/td> <\/tr> <tr> <td><b>6:<\/b><\/td> <td>$40,000 to $49,999<\/td> <\/tr> <tr> <td><b>7:<\/b><\/td> <td>$50,000 to $59,999<\/td> <\/tr> <tr> <td><b>8:<\/b><\/td> <td>$60,000 to $79,999<\/td> <\/tr> <tr> <td><b>9:<\/b><\/td> <td>$80,000 to $99,999<\/td> <\/tr> <tr> <td><b>10:<\/b><\/td> <td>$100,000 to $119,999<\/td> <\/tr> <tr> <td><b>11:<\/b><\/td> <td>$120,000 or more<\/td> <\/tr> <\/table> <\/td> <td>  <table style='border:none;' cellspacing='0' cellpadding='0'><tr><td colspan='2'>Household size (input_size) values:<\/td><\/tr> <tr> <td><b>0:<\/b><\/td> <td>Average<\/td> <\/tr> <tr> <td><b>1:<\/b><\/td> <td>1 person<\/td> <\/tr> <tr> <td><b>2:<\/b><\/td> <td>2 people<\/td> <\/tr> <tr> <td><b>3:<\/b><\/td> <td>3 people<\/td> <\/tr> <tr> <td><b>4:<\/b><\/td> <td>4 people<\/td> <\/tr> <tr> <td><b>5:<\/b><\/td> <td>5 or more people<\/td> <\/tr><\/table> <\/td> <td> <table style='border:none;' cellspacing='0' cellpadding='0'><tr><td colspan='2'>Location mode (input_location_mode) values:<\/td><\/tr>  <tr><td>1:<\/td><td>ZIP code<\/td><\/tr> <tr><td>2:<\/td><td>City<\/td><\/tr><tr><td>3:<\/td><td>County<\/td><\/tr><tr><td>4:<\/td><td>State<\/td><\/tr><\/table> <\/td> <\/tr> <\/table>",
+        "operationId" : "getSandboxFootprint",
+        "parameters" : [ 
+          {
+            "name" : "input_location_mode",
+            "in" : "query",
+            "description" : "Location mode (see \"Imlementation Notes\" above)",
+            "required" : true,
+            "type" : "string",
+            "enum" : [
+                "1",
+                "2",
+                "3",
+                "4"
+            ]
+          }, 
+          {
+            "name" : "input_location",
+            "in" : "query",
+            "description" : "A ZIP code, city, county, or state (depending on 'input_location_mode' parameter)",
+            "required" : true,
+            "type" : "string"
+          }, 
+          {
+            "name" : "input_income",
+            "in" : "query",
+            "description" : "Household income (see \"Imlementation Notes\" above)",
+            "required" : true,
+            "type" : "string",
+            "enum" : [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11"
+            ]
+          }, 
+          {
+            "name" : "input_size",
+            "in" : "query",
+            "description" : "Household size (see \"Imlementation Notes\" above)",
+            "required" : true,
+            "type" : "string",
+            "enum" : [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+            ]
+          }, 
+          {
+            "name" : "input_footprint_transportation_miles1",
+            "in" : "query",
+            "description" : "The number of miles your vehicle travels in a year",
+            "required" : true,
+            "type" : "integer",
+            "maximum" : 100000000,
+            "minimum" : 0
+          }, 
+          {
+            "name" : "input_footprint_transportation_mpg1",
+            "in" : "query",
+            "description" : "Your vehicle's fuel efficiency in miles per gallon",
+            "required" : true,
+            "type" : "integer",
+            "maximum" : 100000000,
+            "minimum" : 0
+          }, 
+          {
+            "name" : "input_footprint_transportation_fuel1",
+            "in" : "query",
+            "description" : "Your vehicle's fuel type",
+            "required" : true,
+            "type" : "string",
+            "enum" : [ "0", "1" ]
+          }, 
+          {
+            "name" : "app_id",
+            "in" : "header",
+            "description" : "The public ID portion of API Central credentials",
+            "required" : true,
+            "type" : "string"
+          }, 
+          {
+            "name" : "app_key",
+            "in" : "header",
+            "description" : "The private key portion of API Central credentials",
+            "required" : true,
+            "type" : "string"
+          } 
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Okay"
+          },
+          "400" : {
+            "description" : "Invalid request"
+          },
+          "401" : {
+            "description" : "Access denied"
+          },
+          "404" : {
+            "description" : "Not found"
+          },
+          "500" : {
+            "description" : "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}
